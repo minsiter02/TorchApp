@@ -22,6 +22,8 @@ public class TorchFragment extends Fragment implements View.OnClickListener{
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
+    Global global = new Global();
+
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
@@ -65,23 +67,26 @@ public class TorchFragment extends Fragment implements View.OnClickListener{
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View root =  inflater.inflate(R.layout.fragment_torch, container, false);
-        Button btn = (Button) root.findViewById(R.id.btnTorchToggle);
-        btn.setOnClickListener(new View.OnClickListener() {
+        Button btnTorchToggle = (Button) root.findViewById(R.id.btnTorchToggle);
+        btnTorchToggle.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 //                Toast toast = Toast.makeText(getActivity(), "hello",Toast.LENGTH_SHORT);
 //                toast.show();
-                torchToggle(getActivity());
+                if(btnTorchToggle.getText().equals(getString(R.string.btnTorchOn))) {
+                    btnTorchToggle.setText(R.string.btnTorchOff);
+                    global.torchToggle("on",getActivity());
+                }
+                else if(btnTorchToggle.getText().equals(getString(R.string.btnTorchOff))) {
+                    btnTorchToggle.setText(R.string.btnTorchOn);
+                    global.torchToggle("off", getActivity());
+                }
             }
         });
         return root;
     }
 
-    public boolean torchToggle(Context context) {
-        Toast toast = Toast.makeText(context, "hello",Toast.LENGTH_SHORT);
-        toast.show();
-        return false;
-    }
+
 
 
     @Override

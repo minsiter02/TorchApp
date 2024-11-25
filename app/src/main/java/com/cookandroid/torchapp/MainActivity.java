@@ -20,40 +20,80 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
         bottomNavigationView = findViewById(R.id.bottomNavigationView);
+
         torchFragment = new TorchFragment();
-        flashFragment = new FlashFragment();
-        morseFragment = new MorseFragment();
-        userFragment = new UserFragment();
+        getSupportFragmentManager().beginTransaction().replace(R.id.fragment,torchFragment).commit();
 
         bottomNavigationView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 int itemId = item.getItemId();
-                Fragment fragment = null;
-                if(itemId == R.id.torchFragment) {
-                    fragment = torchFragment;
-                } else if(itemId == R.id.flashFragment) {
-                    fragment = flashFragment;
-                } else if(itemId == R.id.morseFragment) {
-                    fragment = morseFragment;
-                } else if(itemId == R.id.userFragment) {
-                    fragment = userFragment;
+                if (itemId == R.id.torchFragment) {
+                    if (torchFragment == null) {
+                        torchFragment = new TorchFragment();
+                        getSupportFragmentManager().beginTransaction().add(R.id.fragment, torchFragment).commit();
+                    }
+                    if (torchFragment != null)
+                        getSupportFragmentManager().beginTransaction().show(torchFragment).commit();
+                    if (flashFragment != null)
+                        getSupportFragmentManager().beginTransaction().hide(flashFragment).commit();
+                    if (morseFragment != null)
+                        getSupportFragmentManager().beginTransaction().hide(morseFragment).commit();
+                    if (userFragment != null)
+                        getSupportFragmentManager().beginTransaction().hide(userFragment).commit();
+                return true;
                 }
-                return loadFragment(fragment);
-            }
-        });
+                else if(itemId == R.id.flashFragment) {
+                    if (flashFragment == null) {
+                        flashFragment = new FlashFragment();
+                        getSupportFragmentManager().beginTransaction().add(R.id.fragment, flashFragment).commit();
+                    }
+                    if (torchFragment != null)
+                        getSupportFragmentManager().beginTransaction().hide(torchFragment).commit();
+                    if (flashFragment != null)
+                        getSupportFragmentManager().beginTransaction().show(flashFragment).commit();
+                    if (morseFragment != null)
+                        getSupportFragmentManager().beginTransaction().hide(morseFragment).commit();
+                    if (userFragment != null)
+                        getSupportFragmentManager().beginTransaction().hide(userFragment).commit();
 
+                    return true;
+                }
+                else if(itemId == R.id.morseFragment) {
+                    if (morseFragment == null) {
+                        morseFragment = new MorseFragment();
+                        getSupportFragmentManager().beginTransaction().add(R.id.fragment, morseFragment).commit();
+                    }
+                    if (torchFragment != null)
+                        getSupportFragmentManager().beginTransaction().hide(torchFragment).commit();
+                    if (flashFragment != null)
+                        getSupportFragmentManager().beginTransaction().hide(flashFragment).commit();
+                    if (morseFragment != null)
+                        getSupportFragmentManager().beginTransaction().show(morseFragment).commit();
+                    if (userFragment != null)
+                        getSupportFragmentManager().beginTransaction().hide(userFragment).commit();
+                    return true;
+                } else if(itemId == R.id.userFragment) {
+                    if(userFragment == null) {
+                        userFragment = new UserFragment();
+                        getSupportFragmentManager().beginTransaction().add(R.id.fragment,userFragment).commit();
+                    }
+                    if (torchFragment != null)
+                    getSupportFragmentManager().beginTransaction().hide(torchFragment).commit();
+                    if (flashFragment != null)
+                        getSupportFragmentManager().beginTransaction().hide(flashFragment).commit();
+                    if (morseFragment != null)
+                        getSupportFragmentManager().beginTransaction().hide(morseFragment).commit();
+                    if (userFragment != null)
+                        getSupportFragmentManager().beginTransaction().show(userFragment).commit();
+                    return true;
+                }
+                else
+                    return false;
+            }
+        }); // fragment 상태 유지 https://plusratio.tistory.com/52
     }
-    boolean loadFragment(Fragment fragment){
-        if(fragment != null){
-            getSupportFragmentManager()
-                    .beginTransaction()
-                    .replace(R.id.fragment, fragment)
-                    .commit();
-            return true;
-        }else{
-            return false;
-        }
-    }
+
 }
