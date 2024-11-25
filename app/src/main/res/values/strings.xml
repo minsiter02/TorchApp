@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">TorchApp</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="btnTorchOn">플래시 켜기</string>
+    <string name="btnTorchOff">플래시 끄기</string>
+</resources>

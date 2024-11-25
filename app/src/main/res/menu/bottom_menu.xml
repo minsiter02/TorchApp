@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/torchFragment"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:icon="@drawable/baseline_flashlight_on_24"
+        android:title="토치" />
+    <item
+        android:id="@+id/flashFragment"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:icon="@drawable/baseline_flash_on_24"
+        android:title="점멸" />
+    <item
+        android:id="@+id/morseFragment"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:icon="@drawable/baseline_more_horiz_24"
+        android:title="모스" />
+    <item
+        android:id="@+id/userFragment"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:icon="@drawable/baseline_supervised_user_circle_24"
+        android:title="유저" />
+</menu>
