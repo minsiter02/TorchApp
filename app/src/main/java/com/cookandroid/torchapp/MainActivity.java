@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.view.MenuItem;
 
@@ -11,15 +12,15 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
 
 public class MainActivity extends AppCompatActivity {
-
-
     BottomNavigationView bottomNavigationView;
-    Fragment torchFragment, flashFragment, morseFragment, userFragment;
+    Fragment torchFragment, flashFragment, morseFragment, settingsFragment;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        Global global = new Global();
 
         bottomNavigationView = findViewById(R.id.bottomNavigationView);
 
@@ -41,8 +42,8 @@ public class MainActivity extends AppCompatActivity {
                         getSupportFragmentManager().beginTransaction().hide(flashFragment).commit();
                     if (morseFragment != null)
                         getSupportFragmentManager().beginTransaction().hide(morseFragment).commit();
-                    if (userFragment != null)
-                        getSupportFragmentManager().beginTransaction().hide(userFragment).commit();
+                    if (settingsFragment != null)
+                        getSupportFragmentManager().beginTransaction().hide(settingsFragment).commit();
                 return true;
                 }
                 else if(itemId == R.id.flashFragment) {
@@ -56,8 +57,8 @@ public class MainActivity extends AppCompatActivity {
                         getSupportFragmentManager().beginTransaction().show(flashFragment).commit();
                     if (morseFragment != null)
                         getSupportFragmentManager().beginTransaction().hide(morseFragment).commit();
-                    if (userFragment != null)
-                        getSupportFragmentManager().beginTransaction().hide(userFragment).commit();
+                    if (settingsFragment != null)
+                        getSupportFragmentManager().beginTransaction().hide(settingsFragment).commit();
 
                     return true;
                 }
@@ -72,22 +73,22 @@ public class MainActivity extends AppCompatActivity {
                         getSupportFragmentManager().beginTransaction().hide(flashFragment).commit();
                     if (morseFragment != null)
                         getSupportFragmentManager().beginTransaction().show(morseFragment).commit();
-                    if (userFragment != null)
-                        getSupportFragmentManager().beginTransaction().hide(userFragment).commit();
+                    if (settingsFragment != null)
+                        getSupportFragmentManager().beginTransaction().hide(settingsFragment).commit();
                     return true;
-                } else if(itemId == R.id.userFragment) {
-                    if(userFragment == null) {
-                        userFragment = new UserFragment();
-                        getSupportFragmentManager().beginTransaction().add(R.id.fragment,userFragment).commit();
+                } else if(itemId == R.id.settingsFragment) {
+                    if(settingsFragment == null) {
+                        settingsFragment = new SettingsFragment();
+                        getSupportFragmentManager().beginTransaction().add(R.id.fragment,settingsFragment).commit();
                     }
                     if (torchFragment != null)
-                    getSupportFragmentManager().beginTransaction().hide(torchFragment).commit();
+                        getSupportFragmentManager().beginTransaction().hide(torchFragment).commit();
                     if (flashFragment != null)
                         getSupportFragmentManager().beginTransaction().hide(flashFragment).commit();
                     if (morseFragment != null)
                         getSupportFragmentManager().beginTransaction().hide(morseFragment).commit();
-                    if (userFragment != null)
-                        getSupportFragmentManager().beginTransaction().show(userFragment).commit();
+                    if (settingsFragment != null)
+                        getSupportFragmentManager().beginTransaction().show(settingsFragment).commit();
                     return true;
                 }
                 else

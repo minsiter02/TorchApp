@@ -19,10 +19,19 @@
         android:layout_height="wrap_content"
         android:icon="@drawable/baseline_more_horiz_24"
         android:title="모스" />
+    <!-->
     <item
         android:id="@+id/userFragment"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:icon="@drawable/baseline_supervised_user_circle_24"
         android:title="유저" />
+     <!-->
+    <item
+        android:id="@+id/settingsFragment"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:icon="@drawable/baseline_supervised_user_circle_24"
+        android:title="설정" />
+
 </menu>
