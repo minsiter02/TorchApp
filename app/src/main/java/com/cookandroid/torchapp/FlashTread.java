@@ -9,7 +9,6 @@ public class FlashTread implements Runnable {
     private Handler handler;
     private boolean flashRun = true;
     private int speed = 1000;
-    FlashFragment flashFragment = new FlashFragment();
 
     public FlashTread(Handler handler){
         this.handler = handler;
@@ -30,7 +29,6 @@ public class FlashTread implements Runnable {
                 toggleControl = !(toggleControl);
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt();
-                System.out.println("Runnable interrupted");
             }
 
         }

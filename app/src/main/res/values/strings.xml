@@ -2,10 +2,15 @@
     <string name="app_name">TorchApp</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <!-- Buttons -->
     <string name="btnTorchOn">플래시 켜기</string>
     <string name="btnTorchOff">플래시 끄기</string>
     <string name="btnFlashOn">깜빡임 켜기</string>
     <string name="btnFlashOff">깜빡임 끄기</string>
+    <string name="btnMoresPlay">모스부호 켬</string>
+    <string name="btnMorseStop">모스부호 끔</string>
+    <!-- hint -->
+    <string name="edtMorseHint">한글, 숫자, 영문을 입력</string>
     <!-- Preference Titles -->
     <string name="messages_header">Messages</string>
     <string name="sync_header">Sync</string>
