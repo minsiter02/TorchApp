@@ -1,33 +1,47 @@
-<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto">
-    <PreferenceCategory app:title="@string/messages_header">
+<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    >
+    <PreferenceCategory app:title="@string/torch_header"
+        app:iconSpaceReserved="false">
 
-        <EditTextPreference
-            app:key="signature"
-            app:title="@string/signature_title"
-            app:useSimpleSummaryProvider="true" />
-
-        <ListPreference
-            app:defaultValue="reply"
-            app:entries="@array/reply_entries"
-            app:entryValues="@array/reply_values"
-            app:key="reply"
-            app:title="@string/reply_title"
-            app:useSimpleSummaryProvider="true" />
+        <SwitchPreferenceCompat
+            app:iconSpaceReserved="false"
+            app:key="torchVibrate"
+            app:title="@string/vibrate_title"
+            app:summary="@string/vibrate_summary"
+            app:defaultValue="true" />
 
     </PreferenceCategory>
 
-    <PreferenceCategory app:title="@string/sync_header">
+    <PreferenceCategory app:title="@string/flash_header"
+        app:iconSpaceReserved="false">
 
         <SwitchPreferenceCompat
-            app:key="sync"
-            app:title="@string/sync_title" />
+            app:iconSpaceReserved="false"
+            app:key="flashVibrate"
+            app:title="@string/vibrate_title"
+            app:summary="@string/flash_summary"
+            app:defaultValue="true" />
 
+    </PreferenceCategory>
+    <PreferenceCategory app:title="@string/morse_header"
+        app:iconSpaceReserved="false">
         <SwitchPreferenceCompat
-            app:dependency="sync"
-            app:key="attachment"
-            app:summaryOff="@string/attachment_summary_off"
-            app:summaryOn="@string/attachment_summary_on"
-            app:title="@string/attachment_title" />
+            app:iconSpaceReserved="false"
+            app:key="morseVibrate"
+            app:title="@string/vibrate_title"
+            app:summary="@string/morse_summary"
+            app:defaultValue="true" />
+        <SeekBarPreference
+            app:iconSpaceReserved="false"
+            app:key="morseSpeed"
+            app:title="@string/speed_title"
+            app:summary="@string/morseSpeed_summary"
+            android:progress="0"
+            android:max="100"
+            />
+
 
     </PreferenceCategory>
 

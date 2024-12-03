@@ -1,8 +1,10 @@
 package com.cookandroid.torchapp;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.preference.PreferenceManager;
 
 import android.os.Handler;
 import android.os.Looper;
@@ -27,13 +29,16 @@ public class FlashFragment extends Fragment {
 
     Thread thread;
     Global global = new Global();
+    final double flashWeight = 0.7f;
+    private boolean flashRun = true;
+    boolean vibrate = true;
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
-    private boolean flashRun = false;
+
     public FlashFragment() {
         // Required empty public constructor
     }
@@ -73,22 +78,24 @@ public class FlashFragment extends Fragment {
         View root =  inflater.inflate(R.layout.fragment_flash, container, false);
         Button btnFlashToggle = (Button) root.findViewById(R.id.btnFlashToggle);
         SeekBar seekBar = (SeekBar) root.findViewById(R.id.seekBar);
-
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
 
         handler = new Handler(Looper.getMainLooper()) {
             public void handleMessage(Message msg){
                 String toggle = (String) msg.obj;
-                global.torchToggle(toggle,root.getContext());
+                vibrate = sharedPreferences.getBoolean("flashVibrate",true);
+                global.torchToggle(toggle,vibrate,root.getContext());
             }
         };FlashTread flashRunnable = new FlashTread(handler);
         btnFlashToggle.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 if(btnFlashToggle.getText().equals(getString(R.string.btnFlashOff))) {
                     flashRunnable.stop();
                     if(thread != null)
                         thread.interrupt();
-                    global.torchToggle("off",root.getContext());
+                    global.torchToggle("off",vibrate,root.getContext());
                     btnFlashToggle.setText(R.string.btnFlashOn);
                 }
                 else if(btnFlashToggle.getText().equals(getString(R.string.btnFlashOn))) {
@@ -99,15 +106,13 @@ public class FlashFragment extends Fragment {
                 }
             }
         });
-        final double flashWeight = 0.7f;
+
         seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                double seekBarPG = seekBar.getProgress();
-                int waitTime =(int) ( Math.pow(flashWeight, seekBarPG/10) * 1000);
-                Log.i("speed",Double.toString(waitTime));
+                int seekBarPG = seekBar.getProgress();
+                int waitTime = global.setSpeedValue(flashWeight,seekBarPG);
                 flashRunnable.setSpeed(waitTime); // 시간이므로
-
             }
 
             @Override

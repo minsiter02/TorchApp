@@ -4,16 +4,18 @@ import android.content.Context;
 import android.hardware.camera2.CameraAccessException;
 import android.hardware.camera2.CameraManager;
 import android.os.Build;
+import android.os.VibrationEffect;
 import android.os.Vibrator;
-
+import android.media.AudioAttributes;
 import com.vane.hanguleditor.HangulSplitItem;
 
 import java.util.Objects;
 
 public class Global {
-    public boolean torchToggle(String command, Context context) {
+    public boolean torchToggle(String command,boolean vibrate, Context context) {
 
         Vibrator vibrator = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
+        AudioAttributes audioAttributes = new AudioAttributes.Builder().setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION).setUsage(AudioAttributes.USAGE_ALARM).build();
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             CameraManager camManager = (CameraManager) context.getSystemService(Context.CAMERA_SERVICE);
@@ -25,12 +27,15 @@ public class Global {
                 if (camManager != null) {
                     if (command.equals("on")) {
                         camManager.setTorchMode(cameraId, true);   // Turn ON
-                        Objects.requireNonNull(vibrator).vibrate(500);
+                        if (vibrate)
+                            //Objects.requireNonNull(vibrator).vibrate(500); //기존 백그라운드로 갈시 진동 X
+                            vibrator.vibrate(500,audioAttributes);
                         return true;
 
                     } else {
                         camManager.setTorchMode(cameraId, false);  // Turn OFF
-                        Objects.requireNonNull(vibrator).vibrate(500);
+                        if(vibrate)
+                            vibrator.vibrate(500,audioAttributes);
                         return false;
                     }
                 }
@@ -57,6 +62,10 @@ public class Global {
             if (item.getThread()!=' ')
                 resultValue += Character.toString(item.getThread()) + " ";
         }
+        return resultValue;
+    }
+    public int setSpeedValue(double weight, double progress) {
+        int resultValue = (int) ( Math.pow(weight, progress/10) * 1000);
         return resultValue;
     }
     public String convertMorseCode(String value) {

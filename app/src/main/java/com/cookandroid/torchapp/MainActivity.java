@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.MenuItem;
 
@@ -23,7 +24,7 @@ public class MainActivity extends AppCompatActivity {
         Global global = new Global();
 
         bottomNavigationView = findViewById(R.id.bottomNavigationView);
-
+        bottomNavigationView.setBackgroundColor(Color.DKGRAY);
         torchFragment = new TorchFragment();
         getSupportFragmentManager().beginTransaction().replace(R.id.fragment,torchFragment).commit();
 

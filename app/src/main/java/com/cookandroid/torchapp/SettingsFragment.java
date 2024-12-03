@@ -1,8 +1,10 @@
 package com.cookandroid.torchapp;
 
 import android.os.Bundle;
+import android.view.ViewGroup;
 
 import androidx.preference.PreferenceFragmentCompat;
+import androidx.preference.SeekBarPreference;
 
 public class SettingsFragment extends PreferenceFragmentCompat {
 

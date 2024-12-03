@@ -1,9 +1,11 @@
 package com.cookandroid.torchapp;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.preference.PreferenceManager;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,6 +25,7 @@ public class TorchFragment extends Fragment implements View.OnClickListener{
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     Global global = new Global();
+    boolean vibrate = true;
 
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
@@ -68,18 +71,20 @@ public class TorchFragment extends Fragment implements View.OnClickListener{
         // Inflate the layout for this fragment
         View root =  inflater.inflate(R.layout.fragment_torch, container, false);
         Button btnTorchToggle = (Button) root.findViewById(R.id.btnTorchToggle);
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
+
         btnTorchToggle.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                Toast toast = Toast.makeText(getActivity(), "hello",Toast.LENGTH_SHORT);
-//                toast.show();
+                vibrate = sharedPreferences.getBoolean("torchVibrate",true);
+
                 if(btnTorchToggle.getText().equals(getString(R.string.btnTorchOn))) {
                     btnTorchToggle.setText(R.string.btnTorchOff);
-                    global.torchToggle("on",getActivity());
+                    global.torchToggle("on", vibrate, root.getContext());
                 }
                 else if(btnTorchToggle.getText().equals(getString(R.string.btnTorchOff))) {
                     btnTorchToggle.setText(R.string.btnTorchOn);
-                    global.torchToggle("off", getActivity());
+                    global.torchToggle("off", vibrate,root.getContext());
                 }
             }
         });
@@ -93,4 +98,5 @@ public class TorchFragment extends Fragment implements View.OnClickListener{
     public void onClick(View v) {
 
     }
+
 }

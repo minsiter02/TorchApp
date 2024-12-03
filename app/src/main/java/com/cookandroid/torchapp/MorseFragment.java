@@ -1,8 +1,10 @@
 package com.cookandroid.torchapp;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.preference.PreferenceManager;
 
 import android.os.Handler;
 import android.os.Looper;
@@ -35,6 +37,9 @@ public class MorseFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+    boolean vibrate = true;
+    final float morseWeight = 0.7f;
+    int progress,tick;
 
     public MorseFragment() {
         // Required empty public constructor
@@ -74,17 +79,19 @@ public class MorseFragment extends Fragment {
         View root = inflater.inflate(R.layout.fragment_morse, container, false);
         Button btnMoresToggle = (Button) root.findViewById(R.id.btnMoresToggle);
         EditText edtMores = (EditText) root.findViewById(R.id.edtMores);
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
 
         handler = new Handler(Looper.getMainLooper()) {
             public void handleMessage(Message msg){
                 String toggle = (String) msg.obj;
-                global.torchToggle(toggle,root.getContext());
+                global.torchToggle(toggle,vibrate,root.getContext());
             }
         };MorseThread moresRunnable = new MorseThread(handler,btnMoresToggle);
 
         btnMoresToggle.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 String edtMoresText = edtMores.getText().toString();
                 String inputEdtMoresText = global.convertText(edtMoresText);
                 String morseCode = global.convertMorseCode(inputEdtMoresText);
@@ -94,10 +101,17 @@ public class MorseFragment extends Fragment {
                     moresRunnable.stop();
                     if(thread != null)
                         thread.interrupt();
-                    global.torchToggle("off",root.getContext());
+                    global.torchToggle("off",vibrate,root.getContext());
                     btnMoresToggle.setText(R.string.btnMoresPlay);
                 }
                 else if(btnMoresToggle.getText().equals(getString(R.string.btnMoresPlay))) {
+
+                    vibrate = sharedPreferences.getBoolean("morseVibrate",true);
+                    progress = sharedPreferences.getInt("morseSpeed",0);
+
+                    tick = global.setSpeedValue(morseWeight,progress);
+                    moresRunnable.setTickSpeed(tick);
+
                     moresRunnable.start();
                     thread = new Thread(moresRunnable);
                     thread.start();
