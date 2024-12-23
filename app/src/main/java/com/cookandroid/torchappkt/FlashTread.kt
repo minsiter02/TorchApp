@@ -1,51 +1,45 @@
-package com.cookandroid.torchapp;
+package com.cookandroid.torchappkt
 
-import android.content.Context;
-import android.os.Handler;
-import android.os.Message;
-import android.util.Log;
+import android.os.Handler
 
-public class FlashTread implements Runnable {
-    private Handler handler;
-    private boolean flashRun = true;
-    private int speed = 1000;
+class FlashTread(private val handler: Handler) : Runnable {
+    private var flashRun = true
+    private var speed = 1000
 
-    public FlashTread(Handler handler){
-        this.handler = handler;
-    }
-    @Override
-    public void run()  {
-        boolean toggleControl = false;
+    override fun run() {
+        var toggleControl = false
         while (flashRun) {
             try {
-                Message message = handler.obtainMessage();
-                if (toggleControl)
-                    message.obj = "off";
-                else
-                    message.obj = "on";
+                val message = handler.obtainMessage()
+                if (toggleControl) message.obj = "off"
+                else message.obj = "on"
                 // handler.removeCallbacksAndMessages(null);
-                handler.sendMessage(message);
-                Thread.sleep(speed);
-                toggleControl = !(toggleControl);
-            } catch (InterruptedException e) {
-                Thread.currentThread().interrupt();
+                handler.sendMessage(message)
+                Thread.sleep(speed.toLong())
+                toggleControl = !(toggleControl)
+            } catch (e: InterruptedException) {
+                Thread.currentThread().interrupt()
             }
-
         }
+    }
 
+    fun setFlashRun() {
+        this.flashRun = true
     }
-    public void setFlashRun(){
-        this.flashRun = true;
-    }
-    public void setFlashRunStop(){ this.flashRun = false; }
 
-    public void stop() {
-        this.flashRun = false;
+    fun setFlashRunStop() {
+        this.flashRun = false
     }
-    public void start() {
-        this.flashRun = true;
+
+    fun stop() {
+        this.flashRun = false
     }
-    public void setSpeed(int speed){
-        this.speed = speed;
+
+    fun start() {
+        this.flashRun = true
+    }
+
+    fun setSpeed(speed: Int) {
+        this.speed = speed
     }
 }

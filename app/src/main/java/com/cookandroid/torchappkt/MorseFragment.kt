@@ -1,126 +1,113 @@
-package com.cookandroid.torchapp;
+package com.cookandroid.torchappkt
 
-import android.content.SharedPreferences;
-import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
-import androidx.preference.PreferenceManager;
-
-import android.os.Handler;
-import android.os.Looper;
-import android.os.Message;
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.EditText;
-
-import com.vane.hanguleditor.HangulEditor;
-import com.vane.hanguleditor.HangulSplitItem;
+import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
+import android.os.Message
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import android.widget.Button
+import android.widget.EditText
+import androidx.fragment.app.Fragment
+import androidx.preference.PreferenceManager
+import com.cookandroid.torchappkt.R
 
 /**
- * A simple {@link Fragment} subclass.
- * Use the {@link MorseFragment#newInstance} factory method to
+ * A simple [Fragment] subclass.
+ * Use the [MorseFragment.newInstance] factory method to
  * create an instance of this fragment.
  */
-public class MorseFragment extends Fragment {
-
+class MorseFragment : Fragment() {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    Handler handler;
-    Thread thread;
-    Global global = new Global();
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+    var handler: Handler? = null
+    var thread: Thread? = null
+    var global: Global = Global()
 
     // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-    boolean vibrate = true;
-    final float morseWeight = 0.7f;
-    int progress,tick;
+    private var mParam1: String? = null
+    private var mParam2: String? = null
+    var vibrate: Boolean = true
+    val morseWeight: Float = 0.7f
+    var progress: Int = 0
+    var tick: Int = 0
 
-    public MorseFragment() {
-        // Required empty public constructor
-    }
-
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment MorseFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static MorseFragment newInstance(String param1, String param2) {
-        MorseFragment fragment = new MorseFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        if (arguments != null) {
+            mParam1 = requireArguments().getString(ARG_PARAM1)
+            mParam2 = requireArguments().getString(ARG_PARAM2)
         }
     }
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         // Inflate the layout for this fragment
-        View root = inflater.inflate(R.layout.fragment_morse, container, false);
-        Button btnMoresToggle = (Button) root.findViewById(R.id.btnMoresToggle);
-        EditText edtMores = (EditText) root.findViewById(R.id.edtMores);
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        val root = inflater.inflate(R.layout.fragment_morse, container, false)
+        val btnMoresToggle = root.findViewById<View>(R.id.btnMoresToggle) as Button
+        val edtMores = root.findViewById<View>(R.id.edtMores) as EditText
+        val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(
+            activity
+        )
 
-        handler = new Handler(Looper.getMainLooper()) {
-            public void handleMessage(Message msg){
-                String toggle = (String) msg.obj;
-                global.torchToggle(toggle,vibrate,root.getContext());
+        handler = object : Handler(Looper.getMainLooper()) {
+            override fun handleMessage(msg: Message) {
+                val toggle = msg.obj as String
+                global.torchToggle(toggle, vibrate, root.context)
             }
-        };MorseThread moresRunnable = new MorseThread(handler,btnMoresToggle);
+        }
+        val moresRunnable = MorseThread(handler as Handler, btnMoresToggle)
 
-        btnMoresToggle.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        btnMoresToggle.setOnClickListener {
+            val edtMoresText = edtMores.text.toString()
+            val inputEdtMoresText = global.convertText(edtMoresText)
+            val morseCode = global.convertMorseCode(inputEdtMoresText)
+            moresRunnable.setMorseCode(morseCode)
+            if (btnMoresToggle.text == getString(R.string.btnMorseStop)) {
+                moresRunnable.stop()
+                if (thread != null) thread!!.interrupt()
+                global.torchToggle("off", vibrate, root.context)
+                btnMoresToggle.setText(R.string.btnMoresPlay)
+            } else if (btnMoresToggle.text == getString(R.string.btnMoresPlay)) {
+                vibrate = sharedPreferences.getBoolean("morseVibrate", true)
+                progress = sharedPreferences.getInt("morseSpeed", 0)
 
-                String edtMoresText = edtMores.getText().toString();
-                String inputEdtMoresText = global.convertText(edtMoresText);
-                String morseCode = global.convertMorseCode(inputEdtMoresText);
-                moresRunnable.setMorseCode(morseCode);
+                tick = global.setSpeedValue(morseWeight.toDouble(), progress.toDouble())
+                moresRunnable.setTickSpeed(tick)
 
-                if(btnMoresToggle.getText().equals(getString(R.string.btnMorseStop))) {
-                    moresRunnable.stop();
-                    if(thread != null)
-                        thread.interrupt();
-                    global.torchToggle("off",vibrate,root.getContext());
-                    btnMoresToggle.setText(R.string.btnMoresPlay);
-                }
-                else if(btnMoresToggle.getText().equals(getString(R.string.btnMoresPlay))) {
-
-                    vibrate = sharedPreferences.getBoolean("morseVibrate",true);
-                    progress = sharedPreferences.getInt("morseSpeed",0);
-
-                    tick = global.setSpeedValue(morseWeight,progress);
-                    moresRunnable.setTickSpeed(tick);
-
-                    moresRunnable.start();
-                    thread = new Thread(moresRunnable);
-                    thread.start();
-                    btnMoresToggle.setText(R.string.btnMorseStop);
-                }
+                moresRunnable.start()
+                thread = Thread(moresRunnable)
+                thread!!.start()
+                btnMoresToggle.setText(R.string.btnMorseStop)
             }
-        });
-        return root;
+        }
+        return root
     }
 
 
+    companion object {
+        private const val ARG_PARAM1 = "param1"
+        private const val ARG_PARAM2 = "param2"
+
+        /**
+         * Use this factory method to create a new instance of
+         * this fragment using the provided parameters.
+         *
+         * @param param1 Parameter 1.
+         * @param param2 Parameter 2.
+         * @return A new instance of fragment MorseFragment.
+         */
+        // TODO: Rename and change types and number of parameters
+        fun newInstance(param1: String?, param2: String?): MorseFragment {
+            val fragment = MorseFragment()
+            val args = Bundle()
+            args.putString(ARG_PARAM1, param1)
+            args.putString(ARG_PARAM2, param2)
+            fragment.arguments = args
+            return fragment
+        }
+    }
 }

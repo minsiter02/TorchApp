@@ -1,101 +1,121 @@
-package com.cookandroid.torchapp;
+package com.cookandroid.torchappkt
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
+import android.graphics.Color
+import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
+import com.cookandroid.torchappkt.R
+import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.android.material.navigation.NavigationBarView
 
-import android.content.Context;
-import android.graphics.Color;
-import android.os.Bundle;
-import android.view.MenuItem;
+class MainActivity : AppCompatActivity() {
 
-import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.google.android.material.navigation.NavigationBarView;
-
-public class MainActivity extends AppCompatActivity {
-    BottomNavigationView bottomNavigationView;
-    Fragment torchFragment, flashFragment, morseFragment, settingsFragment;
+    private var torchFragment: Fragment? = null
+    private var flashFragment: Fragment? = null
+    private var morseFragment: Fragment? = null
+    private var settingsFragment: Fragment? = null
 
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        Global global = new Global();
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_main)
+        val global = Global()
+        val bottomNavigationView: BottomNavigationView? = findViewById(R.id.bottomNavigationView)
+        bottomNavigationView?.setBackgroundColor(Color.DKGRAY)
+        torchFragment = TorchFragment()
+        supportFragmentManager.beginTransaction().replace(
+            R.id.fragment,
+            torchFragment as TorchFragment
+        ).commit()
 
-        bottomNavigationView = findViewById(R.id.bottomNavigationView);
-        bottomNavigationView.setBackgroundColor(Color.DKGRAY);
-        torchFragment = new TorchFragment();
-        getSupportFragmentManager().beginTransaction().replace(R.id.fragment,torchFragment).commit();
-
-        bottomNavigationView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                int itemId = item.getItemId();
-                if (itemId == R.id.torchFragment) {
-                    if (torchFragment == null) {
-                        torchFragment = new TorchFragment();
-                        getSupportFragmentManager().beginTransaction().add(R.id.fragment, torchFragment).commit();
-                    }
-                    if (torchFragment != null)
-                        getSupportFragmentManager().beginTransaction().show(torchFragment).commit();
-                    if (flashFragment != null)
-                        getSupportFragmentManager().beginTransaction().hide(flashFragment).commit();
-                    if (morseFragment != null)
-                        getSupportFragmentManager().beginTransaction().hide(morseFragment).commit();
-                    if (settingsFragment != null)
-                        getSupportFragmentManager().beginTransaction().hide(settingsFragment).commit();
-                return true;
+        bottomNavigationView?.setOnItemSelectedListener(NavigationBarView.OnItemSelectedListener { item ->
+            val itemId = item.itemId
+            if (itemId == R.id.torchFragment) {
+                if (torchFragment == null) {
+                    torchFragment = TorchFragment()
+                    supportFragmentManager.beginTransaction().add(
+                        R.id.fragment,
+                        torchFragment as TorchFragment
+                    )
+                        .commit()
                 }
-                else if(itemId == R.id.flashFragment) {
-                    if (flashFragment == null) {
-                        flashFragment = new FlashFragment();
-                        getSupportFragmentManager().beginTransaction().add(R.id.fragment, flashFragment).commit();
-                    }
-                    if (torchFragment != null)
-                        getSupportFragmentManager().beginTransaction().hide(torchFragment).commit();
-                    if (flashFragment != null)
-                        getSupportFragmentManager().beginTransaction().show(flashFragment).commit();
-                    if (morseFragment != null)
-                        getSupportFragmentManager().beginTransaction().hide(morseFragment).commit();
-                    if (settingsFragment != null)
-                        getSupportFragmentManager().beginTransaction().hide(settingsFragment).commit();
+                if (torchFragment != null) supportFragmentManager.beginTransaction()
+                    .show(torchFragment as TorchFragment).commit()
+                if (flashFragment != null) supportFragmentManager.beginTransaction().hide(
+                    flashFragment!!
+                ).commit()
+                if (morseFragment != null) supportFragmentManager.beginTransaction().hide(
+                    morseFragment!!
+                ).commit()
+                if (settingsFragment != null) supportFragmentManager.beginTransaction().hide(
+                    settingsFragment!!
+                ).commit()
+                true
+            } else if (itemId == R.id.flashFragment) {
+                if (flashFragment == null) {
+                    flashFragment = FlashFragment()
+                    supportFragmentManager.beginTransaction().add(
+                        R.id.fragment,
+                        flashFragment as FlashFragment
+                    )
+                        .commit()
+                }
+                if (torchFragment != null) supportFragmentManager.beginTransaction()
+                    .hide(torchFragment as TorchFragment).commit()
+                if (flashFragment != null) supportFragmentManager.beginTransaction().show(
+                    flashFragment!!
+                ).commit()
+                if (morseFragment != null) supportFragmentManager.beginTransaction().hide(
+                    morseFragment!!
+                ).commit()
+                if (settingsFragment != null) supportFragmentManager.beginTransaction().hide(
+                    settingsFragment!!
+                ).commit()
 
-                    return true;
+                true
+            } else if (itemId == R.id.morseFragment) {
+                if (morseFragment == null) {
+                    morseFragment = MorseFragment()
+                    supportFragmentManager.beginTransaction().add(
+                        R.id.fragment,
+                        morseFragment as MorseFragment
+                    )
+                        .commit()
                 }
-                else if(itemId == R.id.morseFragment) {
-                    if (morseFragment == null) {
-                        morseFragment = new MorseFragment();
-                        getSupportFragmentManager().beginTransaction().add(R.id.fragment, morseFragment).commit();
-                    }
-                    if (torchFragment != null)
-                        getSupportFragmentManager().beginTransaction().hide(torchFragment).commit();
-                    if (flashFragment != null)
-                        getSupportFragmentManager().beginTransaction().hide(flashFragment).commit();
-                    if (morseFragment != null)
-                        getSupportFragmentManager().beginTransaction().show(morseFragment).commit();
-                    if (settingsFragment != null)
-                        getSupportFragmentManager().beginTransaction().hide(settingsFragment).commit();
-                    return true;
-                } else if(itemId == R.id.settingsFragment) {
-                    if(settingsFragment == null) {
-                        settingsFragment = new SettingsFragment();
-                        getSupportFragmentManager().beginTransaction().add(R.id.fragment,settingsFragment).commit();
-                    }
-                    if (torchFragment != null)
-                        getSupportFragmentManager().beginTransaction().hide(torchFragment).commit();
-                    if (flashFragment != null)
-                        getSupportFragmentManager().beginTransaction().hide(flashFragment).commit();
-                    if (morseFragment != null)
-                        getSupportFragmentManager().beginTransaction().hide(morseFragment).commit();
-                    if (settingsFragment != null)
-                        getSupportFragmentManager().beginTransaction().show(settingsFragment).commit();
-                    return true;
+                if (torchFragment != null) supportFragmentManager.beginTransaction()
+                    .hide(torchFragment as TorchFragment).commit()
+                if (flashFragment != null) supportFragmentManager.beginTransaction().hide(
+                    flashFragment!!
+                ).commit()
+                if (morseFragment != null) supportFragmentManager.beginTransaction().show(
+                    morseFragment!!
+                ).commit()
+                if (settingsFragment != null) supportFragmentManager.beginTransaction().hide(
+                    settingsFragment!!
+                ).commit()
+                true
+            } else if (itemId == R.id.settingsFragment) {
+                if (settingsFragment == null) {
+                    settingsFragment = SettingsFragment()
+                    supportFragmentManager.beginTransaction().add(
+                        R.id.fragment,
+                        settingsFragment as SettingsFragment
+                    )
+                        .commit()
                 }
-                else
-                    return false;
-            }
-        }); // fragment 상태 유지 https://plusratio.tistory.com/52
+                if (torchFragment != null) supportFragmentManager.beginTransaction()
+                    .hide(torchFragment as TorchFragment).commit()
+                if (flashFragment != null) supportFragmentManager.beginTransaction().hide(
+                    flashFragment!!
+                ).commit()
+                if (morseFragment != null) supportFragmentManager.beginTransaction().hide(
+                    morseFragment!!
+                ).commit()
+                if (settingsFragment != null) supportFragmentManager.beginTransaction().show(
+                    settingsFragment!!
+                ).commit()
+                true
+            } else false
+        }) // fragment 상태 유지 https://plusratio.tistory.com/52
     }
-
 }

@@ -7,17 +7,17 @@
 
     <fragment
         android:id="@+id/torchFragment"
-        android:name="com.cookandroid.torchapp.TorchFragment"
+        android:name="com.cookandroid.torchappkt.TorchFragment"
         android:label="fragment_torch"
         tools:layout="@layout/fragment_torch" />
     <fragment
         android:id="@+id/flashFragment"
-        android:name="com.cookandroid.torchapp.FlashFragment"
+        android:name="com.cookandroid.torchappkt.FlashFragment"
         android:label="fragment_flash"
         tools:layout="@layout/fragment_flash" />
     <fragment
         android:id="@+id/morseFragment"
-        android:name="com.cookandroid.torchapp.MorseFragment"
+        android:name="com.cookandroid.torchappkt.MorseFragment"
         android:label="fragment_morse"
         tools:layout="@layout/fragment_morse" />
     <fragment
