@@ -14,8 +14,8 @@
     <string name="edtMorseHint">한글, 숫자, 영문을 입력</string>
 
     <!-- Preference Titles -->
-    <string name="torch_header">손전등</string>
-    <string name="flash_header">깜빡임</string>
+    <string name="torch_header">토치</string>
+    <string name="flash_header">점멸</string>
     <string name="morse_header">모스 부호</string>
 
     <!-- Torch Preferences -->
